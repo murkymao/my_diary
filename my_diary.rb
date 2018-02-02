@@ -1,3 +1,12 @@
+if (Gem.win_platform?)
+  Encoding.default_external = Encoding.find(Encoding.locale_charmap)
+  Encoding.default_internal = __ENCODING__
+
+  [STDIN, STDOUT].each do |io|
+    io.set_encoding(Encoding.default_external, Encoding.default_internal)
+  end
+end
+
 puts "Привет, я твой дневник. Скажи мне что у тебя на уме и в душе?"
 puts "Я сохраню все, что ты напишешь до строчки \"end\" в файл."
 puts
@@ -12,7 +21,7 @@ all_lines = []
 
 while line != "end" do
   line = STDIN.gets.encode("UTF-8").chomp
-  all_lines << lines
+  all_lines << line
 end
 
 time = Time.now
@@ -37,4 +46,7 @@ file.puts(separator)
 
 file.close
 
+puts "..."
 puts "Ваша запись сохранена в файл #{file_name}.txt"
+puts "Запись сделана в #{time_string}"
+puts
